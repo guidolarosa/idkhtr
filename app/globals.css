@@ -10,7 +10,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
@@ -24,4 +24,15 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.input {
+  border: 1px solid theme('colors.gray.800');
+  padding: 0.5rem 0;
+}
+
+.button {
+  background: theme('colors.gray.800');
+  color: theme('colors.gray.100');
+  padding: 0.5rem 0;
 }
