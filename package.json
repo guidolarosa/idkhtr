@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sanity/client": "^6.7.0",
+    "@sanity/image-url": "^1.0.2",
     "konva": "^9.2.2",
     "next": "^14.0.0",
     "react": "^18",

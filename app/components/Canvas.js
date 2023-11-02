@@ -3,12 +3,27 @@ import { useRef, useState, useEffect } from "react";
 import CustomImage from "./CustomImage";
 import CustomText from "./CustomText";
 import { checkDeselect } from "../utils/konva-utils";
-import { initialObjects } from "../mock/konva-mock";
+import { getSanityImage, urlFor } from "../utils/sanity";
 
-const Canvas = () => {
+const Canvas = (props) => {
   const [selectedId, selectShape] = useState(null);
   const stageRef = useRef();
-  const [objects, setObjects] = useState(initialObjects);
+  const [objects, setObjects] = useState([]);
+key={idx} 
+  useEffect(() => {
+    if (props.selectedIssue) {
+      setObjects(props.selectedIssue.items.map((item) => {
+        return {
+          type: item.itemType,
+          x: item.x,
+          y: item.y,
+          width: item.width,
+          height: item.height,
+          url: urlFor(item.image),
+        }
+      }))
+    }
+  }, [])
 
   useEffect(() => {
     let scaleBy = 1.01;
@@ -51,7 +66,7 @@ const Canvas = () => {
       ref={stageRef}
     >
       <Layer>
-        {objects.map((obj, i) => {
+        {objects.map((obj, idx) => {
           const objectProps = {
             key: i,
             shapeProps: obj,
@@ -67,9 +82,9 @@ const Canvas = () => {
           };
 
           if (obj.type === "image") {
-            return <CustomImage {...objectProps} />;
+            return <CustomImage key={idx} {...objectProps} />;
           } else if (obj.type === "text") {
-            return <CustomText {...objectProps} />;
+            return <CustomText key={idx} {...objectProps} />;
           }
         })}
       </Layer>

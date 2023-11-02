@@ -8,18 +8,41 @@ const Start = (props) => {
           props.showStart ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
     >
-      <div className="flex flex-col w-[200px]">
-        <h1 className="text-center mb-2 text-2xl font-medium">IDKHTR</h1>
-        <input className="input text-center mb-2" type="text" />
-        <button
-          className="button"
-          onClick={() => {
-            props.setShowCanvas(true);
-            props.setShowStart(false);
-          }}
-        >
-          Start
-        </button>
+      <div className="flex flex-col">
+        <div className="flex flex-col w-[200px]">
+          <h1 className="text-center mb-2 text-2xl font-medium">IDKHTR</h1>
+          <input
+            className="input text-center mb-2"
+            placeholder="Create a new issue"
+            type="text"
+          />
+          <button
+            className="button"
+            onClick={() => {
+              props.setShowCanvas(true);
+              props.setShowStart(false);
+            }}
+          >
+            Start
+          </button>
+        </div>
+        <div className="mt-8">
+          <h2 className="uppercase tracking-wide text-xs opacity-50 mb-2">Other issues</h2>
+          <ul>
+            {props.allIssues && props.allIssues.map((issue, idx) => (
+              <li
+                className="font-medium cursor-pointer"
+                onClick={() => {
+                  props.setSelectedIssue(issue);
+                  props.setShowStart(false);
+                  props.setShowCanvas(true);
+                }}
+              >
+                {issue.title}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

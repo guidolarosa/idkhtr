@@ -1,4 +1,5 @@
 import { boundBoxFunc, onTransformEnd } from "../utils/konva-utils";
+import React from "react";
 import { Rect, Transformer } from "react-konva";
 
 const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
