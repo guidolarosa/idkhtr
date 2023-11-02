@@ -31,6 +31,7 @@ const Start = (props) => {
           <ul>
             {props.allIssues && props.allIssues.map((issue, idx) => (
               <li
+                key={idx}
                 className="font-medium cursor-pointer"
                 onClick={() => {
                   props.setSelectedIssue(issue);
