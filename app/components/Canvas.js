@@ -68,15 +68,15 @@ const Canvas = (props) => {
       <Layer>
         {objects.map((obj, idx) => {
           const objectProps = {
-            key: i,
+            key: idx,
             shapeProps: obj,
-            isSelected: i === selectedId,
+            isSelected: idx === selectedId,
             onSelect: () => {
-              selectShape(i);
+              selectShape(idx);
             },
             onChange: (newAttrs) => {
               const objs = objects.slice();
-              objs[i] = newAttrs;
+              objs[idx] = newAttrs;
               setObjects(objs);
             },
           };

@@ -10,8 +10,8 @@ const Start = (props) => {
     >
       <div className="flex flex-col">
         <div className="flex flex-col w-[200px]">
-          <h1 className="text-center mb-2 text-2xl font-medium">IDKHTR</h1>
-          <input
+          <h1 className="text-center mb-2 text-2xl font-medium border p-4">IDKHTR</h1>
+          {/* <input
             className="input text-center mb-2"
             placeholder="Create a new issue"
             type="text"
@@ -24,7 +24,7 @@ const Start = (props) => {
             }}
           >
             Start
-          </button>
+          </button> */}
         </div>
         <div className="mt-8">
           <h2 className="uppercase tracking-wide text-xs opacity-50 mb-2">Issues</h2>
