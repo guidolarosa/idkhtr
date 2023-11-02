@@ -9,7 +9,7 @@ const Canvas = (props) => {
   const [selectedId, selectShape] = useState(null);
   const stageRef = useRef();
   const [objects, setObjects] = useState([]);
-key={idx} 
+
   useEffect(() => {
     if (props.selectedIssue) {
       setObjects(props.selectedIssue.items.map((item) => {
@@ -23,7 +23,7 @@ key={idx}
         }
       }))
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     let scaleBy = 1.01;
