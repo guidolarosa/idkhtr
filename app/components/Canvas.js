@@ -5,14 +5,14 @@ import CustomText from "./CustomText";
 import { checkDeselect } from "../utils/konva-utils";
 import { getSanityImage, urlFor } from "../utils/sanity";
 
-const Canvas = (props) => {
+const Canvas = ({selectedIssue}) => {
   const [selectedId, selectShape] = useState(null);
   const stageRef = useRef();
   const [objects, setObjects] = useState([]);
 
   useEffect(() => {
-    if (props.selectedIssue) {
-      setObjects(props.selectedIssue.items.map((item) => {
+    if (selectedIssue) {
+      setObjects(selectedIssue.items.map((item) => {
         return {
           type: item.itemType,
           x: item.x,
@@ -23,7 +23,7 @@ const Canvas = (props) => {
         }
       }))
     }
-  }, []);
+  }, [selectedIssue]);
 
   useEffect(() => {
     let scaleBy = 1.01;

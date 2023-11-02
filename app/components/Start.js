@@ -1,30 +1,16 @@
 import React from "react";
+import About from './About'
 
 const Start = (props) => {
   return (
     <div
-      className={`menu h-[100dvh] w-full fixed top-0 left-0 z-10 bg-[rgba(255,255,255,0.3)] flex flex-col-reverse items-center
-        justify-center backdrop-blur-md transition ${
+      className={`menu h-[100dvh] w-full fixed top-0 left-0 z-10 flex justify-center backdrop-blur-md transition px-10 pt-72 ${
           props.showStart ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
     >
-      <div className="flex flex-col">
-        <div className="flex flex-col w-[200px]">
-          <h1 className="text-center mb-2 text-2xl font-medium border p-4">IDKHTR</h1>
-          {/* <input
-            className="input text-center mb-2"
-            placeholder="Create a new issue"
-            type="text"
-          />
-          <button
-            className="button"
-            onClick={() => {
-              props.setShowCanvas(true);
-              props.setShowStart(false);
-            }}
-          >
-            Start
-          </button> */}
+      <div className="flex flex-col w-full">
+        <div className="flex flex-col">
+          <h1 className="mb-2 text-6xl font-bold tracking-wider">IDKHTR</h1>
         </div>
         <div className="mt-8">
           <h2 className="uppercase tracking-wide text-xs opacity-50 mb-2">Issues</h2>
@@ -32,7 +18,7 @@ const Start = (props) => {
             {props.allIssues && props.allIssues.map((issue, idx) => (
               <li
                 key={idx}
-                className="font-medium cursor-pointer"
+                className="font-medium cursor-pointer mb-2"
                 onClick={() => {
                   props.setSelectedIssue(issue);
                   props.setShowStart(false);
@@ -44,6 +30,9 @@ const Start = (props) => {
             ))}
           </ul>
         </div>
+      </div>
+      <div className="w-full">
+        <About />
       </div>
     </div>
   );

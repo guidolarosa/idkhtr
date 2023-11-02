@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Start from "./components/Start";
 import Sidebar from "./components/Sidebar";
-import { client } from './utils/sanity';
+import { client } from "./utils/sanity";
 
 const Canvas = dynamic(() => import("./components/Canvas"), {
   ssr: false,
@@ -13,21 +13,21 @@ const Canvas = dynamic(() => import("./components/Canvas"), {
 export default function Home() {
   const [showCanvas, setShowCanvas] = useState(false);
   const [showStart, setShowStart] = useState(true);
-  const [allIssues, setAllIssues] = useState(null);
+  const [allIssues, setAllIssues] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState(null);
-  const [showSidebar, setShowSidebar] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const onFetchDataSuccess = (data) => {
     setAllIssues(data);
-    console.log(data)
-  }
+    console.log(data);
+  };
 
   useEffect(() => {
     client
       .fetch(`*[_type == "issue"]`)
       .then(onFetchDataSuccess)
-      .catch(console.error)
-  }, [])
+      .catch(console.error);
+  }, []);
 
   return (
     <div className="root overflow-x-hidden">
@@ -39,7 +39,14 @@ export default function Home() {
         />
       </header>
       <main className="bg-white min-h-[100dvh]">
-        <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar}/>
+        <Sidebar
+          showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
+          allIssues={allIssues}
+          setSelectedIssue={setSelectedIssue}
+          setShowCanvas={setShowCanvas}
+          setShowStart={setShowStart}
+        />
         <Start
           showCanvas={showCanvas}
           setShowCanvas={setShowCanvas}

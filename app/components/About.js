@@ -2,7 +2,7 @@ import React from "react";
 
 const About = () => {
   return (
-    <div className="flex flex-col w-1/2 px-20 text-center gap-2">
+    <div className="flex flex-col h-full text-sm text-right gap-2 tracking-widest text-[11px] uppercase text-neutral-500">
       <p>Conceptual readings and theories are aesthetic positionings</p>
       <p>No focus ability</p>
       <p>Whimsical justification for not being interested</p>
