@@ -27,7 +27,7 @@ const Start = (props) => {
           </button>
         </div>
         <div className="mt-8">
-          <h2 className="uppercase tracking-wide text-xs opacity-50 mb-2">Other issues</h2>
+          <h2 className="uppercase tracking-wide text-xs opacity-50 mb-2">Issues</h2>
           <ul>
             {props.allIssues && props.allIssues.map((issue, idx) => (
               <li
