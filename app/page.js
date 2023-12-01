@@ -11,16 +11,19 @@ const Canvas = dynamic(() => import("./components/Canvas"), {
 });
 
 export default function Home() {
-  const [showCanvas, setShowCanvas] = useState(false);
-  const [showStart, setShowStart] = useState(true);
+  const [showCanvas, setShowCanvas] = useState(true);
+  const [showStart, setShowStart] = useState(false);
   const [allIssues, setAllIssues] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
 
   const onFetchDataSuccess = (data) => {
     setAllIssues(data);
-    console.log(data);
   };
+
+  useEffect(() => {
+    setSelectedIssue(allIssues[0])
+  }, [allIssues])
 
   useEffect(() => {
     client
@@ -39,14 +42,14 @@ export default function Home() {
         />
       </header>
       <main className="bg-white min-h-[100dvh]">
-        <Sidebar
+        {/* <Sidebar
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
           allIssues={allIssues}
           setSelectedIssue={setSelectedIssue}
           setShowCanvas={setShowCanvas}
           setShowStart={setShowStart}
-        />
+        /> */}
         <Start
           showCanvas={showCanvas}
           setShowCanvas={setShowCanvas}

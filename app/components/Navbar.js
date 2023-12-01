@@ -4,14 +4,14 @@ const Navbar = ({selectedIssue, setShowSidebar, showSidebar}) => {
   return (
     <div className="navbar fixed py-4 px-8 z-20 w-full flex top-0 left-0 justify-between">
         <div>{selectedIssue && selectedIssue.title}</div>
-        <div
+        {/* <div
           onClick={() => {
             setShowSidebar(!showSidebar);
           }}
           className="cursor-pointer rotate-[-90deg]"
         >
           ▲
-        </div>
+        </div> */}
       </div>
   );
 };
