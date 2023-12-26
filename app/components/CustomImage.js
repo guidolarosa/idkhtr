@@ -6,6 +6,7 @@ import { Image, Transformer, Rect, Text } from "react-konva";
 const CustomImage = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const [image] = useImage(shapeProps.url);
   const [ showShare, setShowShare ] = useState(false)
+  const [ shareHover, setShareHover ] = useState(false)
   const shapeRef = useRef();
   const shareRef = useRef();
   const trRef = useRef();
@@ -32,7 +33,11 @@ const CustomImage = ({ shapeProps, isSelected, onSelect, onChange }) => {
         ref={shapeRef}
         {...shapeProps}
         draggable
+        onDragStart={() => {
+          setShowShare(false);
+        }}
         onDragEnd={(e) => {
+          setShowShare(true)
           onChange({
             ...shapeProps,
             x: e.target.x(),
@@ -47,21 +52,28 @@ const CustomImage = ({ shapeProps, isSelected, onSelect, onChange }) => {
         <Rect
           x={shapeRef.current.attrs.x + 10}
           y={shapeRef.current.attrs.y + 10}
-          fill="white"
+          fill={shareHover ? 'black' : 'white'}
+          stroke={'black'}
           width={shareRef.current.textWidth + 20}
           height={shareRef.current.textHeight * 2.5}
           strokeWidth={1}
-          stroke={'black'}
           visible={showShare}
         />
       )}
       {shapeRef.current && (
         <Text
           text="SHARE"
+          fill={shareHover ? 'white' : 'black'}
           ref={shareRef}
           x={shapeRef.current.attrs.x + 20}
           y={shapeRef.current.attrs.y + 20}
           visible={showShare}
+          onMouseEnter={() => {
+            setShareHover(true)
+          }}
+          onMouseLeave={() => {
+            setShareHover(false)
+          }}
           onClick={() => {
             alert('Copied element position to clipboard')
           }}
