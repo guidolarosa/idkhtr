@@ -1,6 +1,6 @@
 import React from 'react';
 import { boundBoxFunc, onTransformEnd } from "../utils/konva-utils";
-import { Text, Transformer } from "react-konva";
+import { Text, Transformer, Rect } from "react-konva";
 import { useRef, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
@@ -30,8 +30,9 @@ const CustomLink = ({ shapeProps, isSelected, onSelect, onChange, text, url }) =
         url={url}
         fontSize={24}
         fontStyle='bold'
-        fill={'blue'}
+        fill={'red'}
         draggable
+        align="center"
         onDragEnd={(e) => {
           onChange({
             ...shapeProps,
