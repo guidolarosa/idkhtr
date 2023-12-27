@@ -79,8 +79,8 @@ export const buildObjectProps = (
 };
 
 export const setScaleStageEvent = (stageRef) => {
-  let scaleBy = 1.01;
   stageRef.current.on("wheel", (e) => {
+    let scaleBy = 1.01;
     e.evt.preventDefault();
 
     var oldScale = stageRef.current.scaleX();

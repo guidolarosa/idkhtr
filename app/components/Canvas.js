@@ -36,9 +36,9 @@ const Canvas = ({ selectedIssue }) => {
   }, []);
 
   useEffect(() => {
-    if (focusedItem && objects[focusedItem]) {
-      let object = objects[focusedItem]
-      // console.log(object);
+    console.log(focusedItem)
+    if (focusedItem != null && objects[focusedItem]) {
+      let object = objects[focusedItem];
       setInitialCoordinates({
         x: object.x - window.innerWidth / 2 + object.width / 2,
         y: object.y - window.innerHeight / 2 + object.height / 2
