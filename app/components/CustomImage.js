@@ -1,10 +1,12 @@
 import useImage from "use-image";
 import { useRef, useEffect, useState } from "react";
 import { boundBoxFunc, onTransformEnd } from "../utils/konva-utils";
-import { Image, Transformer, Layer, Group } from "react-konva";
+import { Image, Transformer, Group } from "react-konva";
 import ShareButton from "./ShareButton";
+import { handleSelect } from '../utils/utils';
 
-const CustomImage = ({ shapeProps, isSelected, onSelect, onChange, focused, idx }) => {
+
+const CustomImage = ({ shapeProps, isSelected, onSelect, onChange, focused, idx, stage }) => {
   const [image] = useImage(shapeProps.url);
   const [showShare, setShowShare] = useState(false);
   const shapeRef = useRef(null);
@@ -13,17 +15,10 @@ const CustomImage = ({ shapeProps, isSelected, onSelect, onChange, focused, idx 
   const groupRef = useRef(null);
 
   useEffect(() => {
-    if (isSelected) {
-      trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer().batchDraw();
-      groupRef.current.moveToTop();
-      setShowShare(true);
-    } else {
-      setShowShare(false);
-    }
+    handleSelect(shapeRef.current, groupRef.current, trRef.current, setShowShare, isSelected);
 
     if (focused) {
-      groupRef.current.moveToTop();
+      groupRef.current.moveToTop()
     }
   }, [isSelected, focused]);
 
@@ -49,7 +44,7 @@ const CustomImage = ({ shapeProps, isSelected, onSelect, onChange, focused, idx 
             y: e.target.y(),
           });
         }}
-        strokeWidth={10}
+        strokeWidth={focused ? 10 : 0}
         stroke={focused ? "red" : "transparent"}
         onTransformEnd={(e) => {
           onTransformEnd(e, shapeRef, onChange, shapeProps);
@@ -61,6 +56,7 @@ const CustomImage = ({ shapeProps, isSelected, onSelect, onChange, focused, idx 
           shapeRef={shapeRef}
           showShare={showShare}
           itemIndex={idx}
+          stage={stage}
         />
       )}
       {isSelected && (

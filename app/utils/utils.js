@@ -40,6 +40,17 @@ export const copyFocusedObjUrlToClipboard = (idx) => {
   copyToClipboard(focusedItemUrl)
 }
 
+export const handleSelect = (shapeRef, groupRef, trRef, setShowShare, isSelected) => {
+  if (isSelected) {
+    trRef.nodes([shapeRef]);
+    trRef.getLayer().batchDraw();
+    groupRef.moveToTop();
+    setShowShare(true);
+  } else {
+    setShowShare(false);
+  }
+}
+
 export const buildObjectProps = (
   obj,
   idx,
@@ -68,8 +79,8 @@ export const buildObjectProps = (
 };
 
 export const setScaleStageEvent = (stageRef) => {
+  let scaleBy = 1.01;
   stageRef.current.on("wheel", (e) => {
-    let scaleBy = 1.01;
     e.evt.preventDefault();
 
     var oldScale = stageRef.current.scaleX();

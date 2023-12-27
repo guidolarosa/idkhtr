@@ -2,7 +2,7 @@ import { Rect, Text } from "react-konva";
 import {  useState } from "react";
 import { copyFocusedObjUrlToClipboard } from "../utils/utils";
 
-const ShareButton = ({ shapeRef, shareRef, showShare, itemIndex }) => {
+const ShareButton = ({ shapeRef, shareRef, showShare, itemIndex, stage }) => {
   const [shareHover, setShareHover] = useState(false);
 
   return (
@@ -29,9 +29,11 @@ const ShareButton = ({ shapeRef, shareRef, showShare, itemIndex }) => {
         visible={showShare}
         onMouseEnter={() => {
           setShareHover(true);
+          stage.container().style.cursor = "pointer"
         }}
         onMouseLeave={() => {
           setShareHover(false);
+          stage.container().style.cursor = "default"
         }}
         onClick={() => {
           // copyCoordinateUrlToClipboard(shapeRef.current);

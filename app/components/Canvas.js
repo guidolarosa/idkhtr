@@ -59,6 +59,9 @@ const Canvas = ({ selectedIssue }) => {
         checkDeselect(e, selectShape);
       }}
       draggable
+      onClick={() => {
+        setFocusedItem(null);
+      }}
       ref={stageRef}
     >
       <Layer scaleX={1} scaleY={1}>
@@ -74,11 +77,11 @@ const Canvas = ({ selectedIssue }) => {
           );
 
           if (obj.type === "image") {
-            return <CustomImage key={idx} {...objectProps} />;
+            return <CustomImage key={idx} stage={stageRef.current} {...objectProps} />;
           } else if (obj.type === "text") {
-            return <CustomText key={idx} {...objectProps} />;
+            return <CustomText key={idx} stage={stageRef.current} {...objectProps} />;
           } else if (obj.type === "link") {
-            return <CustomLink key={idx} {...objectProps} />;
+            return <CustomLink key={idx} stage={stageRef.current} {...objectProps} />;
           }
         })}
       </Layer>
