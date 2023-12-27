@@ -8,7 +8,7 @@ export const getRandomInt = (min, max) => {
 export const copyToClipboard = async (text) => {
   try {
     await navigator.clipboard.writeText(text);
-    // alert("Copied element position to clipboard");
+    alert("Copied element position to clipboard");
   } catch (err) {
     console.error("Failed to copy: ", err);
   }
