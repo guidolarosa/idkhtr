@@ -5,11 +5,14 @@ import CustomText from "./CustomText";
 import { checkDeselect } from "../utils/konva-utils";
 import { getSanityImage, urlFor } from "../utils/sanity";
 import CustomLink from "./CustomLink";
+import { useRouter } from "next/router";
 
 const Canvas = ({ selectedIssue }) => {
   const [selectedId, selectShape] = useState(0);
   const stageRef = useRef();
   const [objects, setObjects] = useState([]);
+
+  // const router = useRouter();
 
   useEffect(() => {
     const pattern = /^image-([a-f\d]+)-(\d+x\d+)-(\w+)$/;
@@ -83,6 +86,7 @@ const Canvas = ({ selectedIssue }) => {
 
   return (
     <Stage
+      offsetX={0}
       width={window.innerWidth}
       height={window.innerHeight}
       onMouseDown={(e) => {
