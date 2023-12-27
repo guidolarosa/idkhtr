@@ -1,82 +1,66 @@
 import useImage from "use-image";
 import { useRef, useEffect, useState } from "react";
 import { boundBoxFunc, onTransformEnd } from "../utils/konva-utils";
-import { Image, Transformer, Rect, Text } from "react-konva";
+import { Image, Transformer, Layer, Group } from "react-konva";
+import ShareButton from "./ShareButton";
 
-const CustomImage = ({ shapeProps, isSelected, onSelect, onChange }) => {
+const CustomImage = ({ shapeProps, isSelected, onSelect, onChange, focused, idx }) => {
   const [image] = useImage(shapeProps.url);
-  const [ showShare, setShowShare ] = useState(false)
-  const [ shareHover, setShareHover ] = useState(false)
-  const shapeRef = useRef();
-  const shareRef = useRef();
-  const trRef = useRef();
+  const [showShare, setShowShare] = useState(false);
+  const shapeRef = useRef(null);
+  const shareRef = useRef(null);
+  const trRef = useRef(null);
+  const groupRef = useRef(null);
 
   useEffect(() => {
     if (isSelected) {
       trRef.current.nodes([shapeRef.current]);
       trRef.current.getLayer().batchDraw();
+      groupRef.current.moveToTop();
       setShowShare(true);
     } else {
       setShowShare(false);
     }
-  }, [isSelected]);
 
-
+    if (focused) {
+      groupRef.current.moveToTop();
+    }
+  }, [isSelected, focused]);
 
   return (
-    <>
+    <Group ref={groupRef}>
       <Image
         alt="Image"
         image={image}
         onClick={onSelect}
         onTap={onSelect}
         ref={shapeRef}
+        shadowBlur={1}
         {...shapeProps}
         draggable
         onDragStart={() => {
           setShowShare(false);
         }}
         onDragEnd={(e) => {
-          setShowShare(true)
+          setShowShare(true);
           onChange({
             ...shapeProps,
             x: e.target.x(),
             y: e.target.y(),
           });
         }}
+        strokeWidth={10}
+        stroke={focused ? "red" : "transparent"}
         onTransformEnd={(e) => {
           onTransformEnd(e, shapeRef, onChange, shapeProps);
         }}
       />
-      {shareRef.current && (
-        <Rect
-          x={shapeRef.current.attrs.x + 10}
-          y={shapeRef.current.attrs.y + 10}
-          fill={shareHover ? 'black' : 'white'}
-          stroke={'black'}
-          width={shareRef.current.textWidth + 20}
-          height={shareRef.current.textHeight * 2.5}
-          strokeWidth={1}
-          visible={showShare}
-        />
-      )}
       {shapeRef.current && (
-        <Text
-          text="SHARE"
-          fill={shareHover ? 'white' : 'black'}
-          ref={shareRef}
-          x={shapeRef.current.attrs.x + 20}
-          y={shapeRef.current.attrs.y + 20}
-          visible={showShare}
-          onMouseEnter={() => {
-            setShareHover(true)
-          }}
-          onMouseLeave={() => {
-            setShareHover(false)
-          }}
-          onClick={() => {
-            alert('Copied element position to clipboard')
-          }}
+        <ShareButton
+          shareRef={shareRef}
+          shapeRef={shapeRef}
+          showShare={showShare}
+          itemIndex={idx}
         />
       )}
       {isSelected && (
@@ -87,7 +71,7 @@ const CustomImage = ({ shapeProps, isSelected, onSelect, onChange }) => {
           }}
         />
       )}
-    </>
+    </Group>
   );
 };
 

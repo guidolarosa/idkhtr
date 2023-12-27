@@ -3,90 +3,53 @@ import { useRef, useState, useEffect } from "react";
 import CustomImage from "./CustomImage";
 import CustomText from "./CustomText";
 import { checkDeselect } from "../utils/konva-utils";
-import { getSanityImage, urlFor } from "../utils/sanity";
 import CustomLink from "./CustomLink";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
+import { buildObjectProps, setScaleStageEvent, setInitialObjects } from "../utils/utils";
 
 const Canvas = ({ selectedIssue }) => {
-  const [selectedId, selectShape] = useState(0);
+  const [selectedId, selectShape] = useState(null);
+  const [focusedItem, setFocusedItem] = useState(null);
   const stageRef = useRef();
   const [objects, setObjects] = useState([]);
+  const [initialCoordinates, setInitialCoordinates] = useState({
+    x: 0,
+    y: 0,
+  });
 
-  // const router = useRouter();
+  const query = useSearchParams();
 
   useEffect(() => {
-    const pattern = /^image-([a-f\d]+)-(\d+x\d+)-(\w+)$/;
-    if (selectedIssue) {
-      setObjects(
-        selectedIssue.items.map((item) => {
-          let basicItem = {
-            type: item.itemType,
-          };
+    setInitialCoordinates({
+      x: query.get("x"),
+      y: query.get("y"),
+    });
+    setFocusedItem(parseInt(query.get("focusedItem")))
+  }, [query]);
 
-          if (item.itemType == "image") {
-            const [, , dimensions] = pattern.exec(item.image.asset._ref);
-            const [width, height] = dimensions
-              .split("x")
-              .map((v) => parseInt(v, 10));
-            return {
-              ...basicItem,
-              x: item.x ? item.x : 0,
-              y: item.y ? item.y : 0,
-              width: width > 200 ? width / 2 : 200,
-              height: height > 200 ? height / 2 : 200,
-              url: urlFor(item.image),
-            };
-          }
-
-          if (item.itemType == "link") {
-            return {
-              ...basicItem,
-              x: item.x ? item.x : 0,
-              y: item.y ? item.y : 0,
-              // width: width > 200 ? width / 2 : 200,
-              // height: height > 200 ? height / 2 : 200,
-              url: item.url,
-            };
-          }
-        })
-      );
-    }
+  useEffect(() => {
+    setInitialObjects(selectedIssue, setObjects);
   }, [selectedIssue]);
 
   useEffect(() => {
-    let scaleBy = 1.01;
-    stageRef.current.on("wheel", (e) => {
-      e.evt.preventDefault();
-
-      var oldScale = stageRef.current.scaleX();
-      var pointer = stageRef.current.getPointerPosition();
-
-      var mousePointTo = {
-        x: (pointer.x - stageRef.current.x()) / oldScale,
-        y: (pointer.y - stageRef.current.y()) / oldScale,
-      };
-
-      let direction = e.evt.deltaY > 0 ? 1 : -1;
-
-      if (e.evt.ctrlKey) {
-        direction = -direction;
-      }
-
-      var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-
-      stageRef.current.scale({ x: newScale, y: newScale });
-
-      var newPos = {
-        x: pointer.x - mousePointTo.x * newScale,
-        y: pointer.y - mousePointTo.y * newScale,
-      };
-      stageRef.current.position(newPos);
-    });
+    setScaleStageEvent(stageRef)
   }, []);
+
+  useEffect(() => {
+    if (focusedItem && objects[focusedItem]) {
+      let object = objects[focusedItem]
+      // console.log(object);
+      setInitialCoordinates({
+        x: object.x - window.innerWidth / 2 + object.width / 2,
+        y: object.y - window.innerHeight / 2 + object.height / 2
+      })
+    }
+  }, [objects, focusedItem])
 
   return (
     <Stage
-      offsetX={0}
+      offsetX={initialCoordinates.x}
+      offsetY={initialCoordinates.y}
       width={window.innerWidth}
       height={window.innerHeight}
       onMouseDown={(e) => {
@@ -98,44 +61,24 @@ const Canvas = ({ selectedIssue }) => {
       draggable
       ref={stageRef}
     >
-      <Layer scaleX={0.75} scaleY={0.75}>
+      <Layer scaleX={1} scaleY={1}>
         {objects.map((obj, idx) => {
-          console.log(obj);
-          const objectProps = {
-            key: idx,
-            shapeProps: obj,
-            isSelected: idx === selectedId,
-            onSelect: () => {
-              selectShape(idx);
-            },
-            onChange: (newAttrs) => {
-              const objs = objects.slice();
-              objs[idx] = newAttrs;
-              setObjects(objs);
-            },
-            text:
-              obj.type === "link" ? (obj.text ? obj.text : obj.url) : undefined,
-            url: obj.type === "link" ? obj.url : undefined,
-          };
-
-          // console.log(objectProps);
+          const objectProps = buildObjectProps(
+            obj,
+            idx,
+            selectedId,
+            selectShape,
+            objects,
+            setObjects,
+            focusedItem
+          );
 
           if (obj.type === "image") {
-            return (
-              <CustomImage
-                key={idx}
-                shapeProps={objectProps.shapeProps}
-                isSelected={objectProps.isSelected}
-                onSelect={objectProps.onSelect}
-                onChange={objectProps.onChange}
-              />
-            );
+            return <CustomImage key={idx} {...objectProps} />;
           } else if (obj.type === "text") {
             return <CustomText key={idx} {...objectProps} />;
           } else if (obj.type === "link") {
-            return (
-              <CustomLink key={idx} {...objectProps} text={objectProps.text} />
-            );
+            return <CustomLink key={idx} {...objectProps} />;
           }
         })}
       </Layer>

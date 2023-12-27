@@ -8,7 +8,6 @@ const MagicText = ({ children }) => {
   useEffect(() => {
     let randomCharPosition = getRandomInt(0, children.length);
     let randomEmoji = faceEmojis[getRandomInt(0, faceEmojis.length)];
-    console.log(randomEmoji)
     let newString =
       children.slice(0, randomCharPosition) +
       randomEmoji +

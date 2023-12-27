@@ -1,11 +1,14 @@
 import React from 'react';
 import { boundBoxFunc, onTransformEnd } from "../utils/konva-utils";
 import { Text, Transformer, Rect } from "react-konva";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
+import ShareButton from './ShareButton';
 
 const CustomLink = ({ shapeProps, isSelected, onSelect, onChange, text, url }) => {
-  const shapeRef = useRef();
+  const [ showShare, setShowShare ] = useState(false)
+  const shapeRef = useRef(null);
+  const shareRef = useRef(null);
   const trRef = useRef();
   const router = useRouter()
 
@@ -13,6 +16,9 @@ const CustomLink = ({ shapeProps, isSelected, onSelect, onChange, text, url }) =
     if (isSelected) {
       trRef.current.nodes([shapeRef.current]);
       trRef.current.getLayer().batchDraw();
+      setShowShare(true);
+    } else {
+      setShowShare(false);
     }
   }, [isSelected]);
 
@@ -30,7 +36,7 @@ const CustomLink = ({ shapeProps, isSelected, onSelect, onChange, text, url }) =
         url={url}
         fontSize={24}
         fontStyle='bold'
-        fill={'red'}
+        fill={'blue'}
         draggable
         align="center"
         onDragEnd={(e) => {
@@ -44,6 +50,13 @@ const CustomLink = ({ shapeProps, isSelected, onSelect, onChange, text, url }) =
           onTransformEnd(e, shapeRef, onChange, shapeProps);
         }}
       />
+      {shapeRef.current && (
+        <ShareButton 
+          shareRef={shareRef}
+          shapeRef={shapeRef}
+          showShare={showShare}
+        />
+      )}
       {isSelected && (
         <Transformer
           ref={trRef}
